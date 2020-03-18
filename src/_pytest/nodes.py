@@ -508,11 +508,9 @@ class FSCollector(Collector):
         return True
 
     def _collectfile(self, path, handle_dupes=True):
-        assert (
-            path.isfile()
-        ), "{!r} is not a file (isdir={!r}, exists={!r}, islink={!r})".format(
-            path, path.isdir(), path.exists(), path.islink()
-        )
+        if not path.isfile():
+            return ()
+        
         ihook = self.gethookproxy(path)
         if not self.isinitpath(path):
             if ihook.pytest_ignore_collect(path=path, config=self.config):
